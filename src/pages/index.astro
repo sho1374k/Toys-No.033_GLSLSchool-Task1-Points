@@ -1,0 +1,70 @@
+---
+import "../styles/home.scss";
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout>
+	<h1 class="lTitle">GLSL SCHOOL TASK 01.<span class="uSpHide">｜</span><br class="uPcHide">AUDIO VISUALIZER</h1>
+	<div class="lDoor">
+		<button class="lDoor__btn jsPlayBtn" id="jsEntryBtn">
+			<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><g><rect fill="none" height="24" width="24"/></g><g><path d="M12,2C6.48,2,2,6.48,2,12s4.48,10,10,10s10-4.48,10-10S17.52,2,12,2z M9.5,16.5v-9l7,4.5L9.5,16.5z"/></g></svg>
+		</button>
+	</div>
+	<div id="webgl">
+		<canvas id="world"></canvas>
+	</div>
+	<div class="lAudioTime" id="jsAudioTime"></div>
+	<div class="lAudioControl">
+		<div class="lAudioControl__btn">
+			<button class="cAudioPlayBtn jsPlayBtn" id="jsPlayBtn">
+				<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><g><rect fill="none" height="24" width="24"/></g><g><path d="M12,2C6.48,2,2,6.48,2,12s4.48,10,10,10s10-4.48,10-10S17.52,2,12,2z M9.5,16.5v-9l7,4.5L9.5,16.5z"/></g></svg>
+			</button>
+			<button class="cAudioPauseBtn jsPauseBtn" id="jsPauseBtn">
+				<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><g><rect fill="none" height="24" width="24"/></g><g><g><path d="M12,2C6.48,2,2,6.48,2,12s4.48,10,10,10s10-4.48,10-10S17.52,2,12,2z M11,16H9V8h2V16z M15,16h-2V8h2V16z"/></g></g></svg>
+			</button>
+		</div>
+		<div class="lAudioControl__progress">
+			<input class="cAudioInputSlideTime" type="range" id="jsTimeProgress" min="0" value="0" step="1">
+		</div>
+		<div class="lAudioControl__config" id="jsAudioConfigOpenBtn">
+			<button class="cAudioConfigBtn">
+				<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="m495.9 166.6c3.2 8.7.5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4l-55.6 17.8c-8.8 2.8-18.6.3-24.5-6.8-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4c-1.1-8.4-1.7-16.9-1.7-25.5s.6-17.1 1.7-25.4l-43.3-39.4c-6.9-6.2-9.6-15.9-6.4-24.6 4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2 5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8 13.8-2.4 28-3.6 42.5-3.6s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8 8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zm-239.9 169.4a80 80 0 1 0 0-160 80 80 0 1 0 0 160z"/></svg>
+			</button>
+		</div>
+	</div>
+	<div class="lConfig" id="jsMenu">
+		<audio class="uHidden" src="" id="audio" class="" controls preload="auto"></audio>
+		<div class="lConfig__inner">
+			<ul class="cAudioParamsList">
+				<li class="cAudioParams">
+					<label class="cAudioInputLabel" for="jsVolumeProgress">Volume</label>
+					<input class="cAudioInputSlide" type="range" id="jsVolumeProgress" min="0" max="1" value="1.0" step="0.1">
+				</li>
+				<li class="cAudioParams">
+					<label class="cAudioInputLabel" for="jsPlaybackRateProgress">Speed</label>
+					<input class="cAudioInputSlide" type="range" id="jsPlaybackRateProgress" min="0.25" max="3" step="0.05" value="1">
+				</li>
+				<li class="cAudioParams">
+					<label class="cAudioInputLabel" for="jsPannerProgress">Panner</label>
+					<input class="cAudioInputSlide" type="range" id="jsPannerProgress" min="-1" max="1" value="0" step="0.01">
+				</li>
+				<li class="cAudioParams">
+					<label class="cAudioInputLabel" for="jsFilterProgress">Sound Filter</label>
+					<input class="cAudioInputSlide" type="range" id="jsFilterProgress" min="100" max="20000" value="20000" step="100" >
+				</li>
+				<li class="cAudioParams">
+					<label class="cAudioInputLabel">Upload Audio File</label>
+					<label for="jsAudioFile" class="cAudioInputFile">
+						<input type="file" name="jsAudioFile" id="jsAudioFile" accept="audio/mp3" />
+						<span class="cAudioInputFile__result" id="fileNameResult">Click to select mp3 files</span>
+					</label>
+				</li>
+			</ul>
+		</div>
+		<div class="lConfig__close" id="jsAudioConfigCloseBtn">
+			<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#fff"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg>
+		</div>
+	</div>
+</Layout>
+
+<script src="../scripts/home.js"></script>

@@ -1,0 +1,537 @@
+@use "./global/app" as *;
+
+html,
+body {
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+  height: 100svh;
+}
+
+// --------------------------
+
+// webgl
+
+// --------------------------
+#webgl {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  z-index: 0;
+  width: 100vw;
+  height: 100%;
+  height: 100svh;
+  canvas {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+    margin: auto;
+  }
+
+  opacity: 0;
+  body[data-loaded="1"] & {
+    transition: 1s ease opacity;
+    opacity: 1;
+  }
+}
+
+// --------------------------
+
+// 扉
+
+// --------------------------
+.lDoor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 300;
+  width: 100vw;
+  height: 100vh;
+  height: 100svh;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+
+  body[data-entry="1"] & {
+    transition: 0.4s ease opacity;
+    opacity: 0;
+    pointer-events: none;
+    user-select: none;
+  }
+}
+.lDoor__btn {
+  cursor: pointer;
+  width: max-content;
+  height: max-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: liquid(100);
+  height: liquid(100);
+  filter: drop-shadow(0 0 liquid(10) #ffdd8d);
+  @include sp_w() {
+    width: liquid(50);
+    height: liquid(50);
+    filter: drop-shadow(0 0 liquid(5) #ffdd8d);
+  }
+  svg {
+    pointer-events: none;
+    user-select: none;
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+    transition: $hoverTime $hoverEase opacity;
+    path {
+      fill: rgba(#fff, 0.5);
+    }
+  }
+  @include hover() {
+    svg {
+      opacity: 0.5;
+    }
+  }
+}
+
+// --------------------------
+
+// サイトタイトル
+
+// --------------------------
+.lTitle {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 100;
+  font-size: 16px;
+  color: var(--white);
+  font-family: var(--ja);
+  font-weight: 900;
+  -webkit-text-stroke: 1px var(--white);
+  span {
+    display: inline-block;
+    margin: 0 2px;
+    -webkit-text-stroke: 4px var(--white);
+    transform: scale(1, 0.8);
+  }
+  @include sp_w() {
+    top: 16px;
+    left: 16px;
+    font-size: 14px;
+  }
+
+  opacity: 0;
+  body[data-loaded="1"] & {
+    transition: 1s ease opacity;
+    opacity: 1;
+  }
+}
+
+// --------------------------
+
+// 再生時間
+
+// --------------------------
+.lAudioTime {
+  pointer-events: none;
+  user-select: none;
+  position: fixed;
+  top: calc(liquid(36) * -1);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  width: max-content;
+  height: max-content;
+  margin: auto;
+  font-size: liquid(48);
+  font-family: var(--ja);
+  font-family: var(--en);
+  font-weight: bold;
+  color: var(--white);
+  text-align: center;
+  line-height: 100%;
+  letter-spacing: liquid(4);
+  vertical-align: middle;
+  text-shadow:
+    0 0 liquid(20) rgba(#fff, 0.5),
+    0 0 liquid(20) rgba(#fff, 0.5);
+
+  @include sp_w() {
+    top: calc(liquid(24) * -1);
+    font-size: liquid(32);
+    letter-spacing: liquid(2);
+  }
+  span {
+    font-family: var(--en);
+    display: inline-block;
+    padding: 0 liquid(12);
+    letter-spacing: liquid(-2);
+    margin-left: liquid(-6);
+    @include sp_w() {
+      padding: 0 liquid(10);
+      letter-spacing: liquid(-1);
+      margin-left: liquid(-3);
+    }
+  }
+
+  opacity: 0;
+  body[data-loaded="1"] & {
+    transition: 1s ease opacity;
+    opacity: 1;
+    mix-blend-mode: overlay;
+  }
+}
+
+// --------------------------
+
+// オーディオコントローラー
+
+// --------------------------
+.lAudioControl {
+  position: fixed;
+  top: calc(liquid(36 * 1.5) + 36px);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  margin: auto;
+  width: max-content;
+  height: max-content;
+  mix-blend-mode: overlay;
+  filter: drop-shadow(0px 0px 2px var(--white));
+  @include sp_w() {
+    top: calc(liquid(24 * 1.5) + 20px);
+  }
+
+  opacity: 0;
+  body[data-loaded="1"] & {
+    transition: 1s ease opacity;
+    opacity: 1;
+  }
+}
+.lAudioControl__progress {
+}
+.lAudioControl__btn {
+  position: absolute;
+  top: 50%;
+  left: -24px - 12px;
+  transform: translate(0, -50%);
+  z-index: 1;
+  width: 24px;
+  height: 24px;
+  @include sp_w() {
+    left: -20px - 8px;
+    width: 20px;
+    height: 20px;
+  }
+  .cAudioPlayBtn,
+  .cAudioPauseBtn {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+  }
+}
+.cAudioPlayBtn,
+.cAudioPauseBtn {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  width: 24px;
+  height: 24px;
+  @include sp_w() {
+    width: 20px;
+    height: 20px;
+  }
+  svg {
+    pointer-events: none;
+    user-select: none;
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+    transition: $hoverTime $hoverEase opacity;
+    path {
+      fill: var(--white);
+    }
+  }
+  @include hover() {
+    svg {
+      opacity: 0.5;
+    }
+  }
+}
+.cAudioPlayBtn {
+  body[data-audio-status="run"] & {
+    display: none;
+  }
+}
+.cAudioPauseBtn {
+  // data-audio-status
+  body:not([data-audio-status="run"]) & {
+    display: none;
+  }
+}
+.cAudioInputSlideTime {
+  width: 200px;
+  height: 16px;
+  border-radius: 16px;
+  background: rgba(#b6a86f, 0);
+  border: solid 2px var(--white);
+  @include sp_w() {
+    width: 100px;
+    height: 14px;
+    border-radius: 14px;
+  }
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none; // デフォルトのつまみのスタイルを解除
+    background: var(--white);
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    transform: scale(0.9);
+    @include sp_w() {
+      width: 14px;
+      height: 14px;
+      transform: scale(0.8);
+    }
+  }
+  &::-moz-range-thumb {
+    border: none; // デフォルトの線を消す
+    background: var(--white);
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    transform: scale(0.9);
+    @include sp_w() {
+      width: 14px;
+      height: 14px;
+      transform: scale(0.8);
+    }
+  }
+  &::-moz-focus-outer {
+    background: var(--white);
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    transform: scale(0.9);
+    @include sp_w() {
+      width: 14px;
+      height: 14px;
+      transform: scale(0.8);
+    }
+  }
+  &:active::-webkit-slider-thumb {
+    background: var(--white);
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    @include sp_w() {
+      width: 14px;
+      height: 14px;
+      transform: scale(0.8);
+    }
+  }
+}
+.lAudioControl__config {
+  position: absolute;
+  top: 50%;
+  right: -24px - 12px;
+  transform: translate(0, -50%);
+  z-index: 1;
+  @include sp_w() {
+    right: -20px - 8px;
+  }
+}
+.cAudioConfigBtn {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  width: 24px;
+  height: 24px;
+  @include sp_w() {
+    width: 20px;
+    height: 20px;
+  }
+  svg {
+    pointer-events: none;
+    user-select: none;
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+    transform: scale(0.9);
+    transition: $hoverTime $hoverEase opacity;
+    path {
+      fill: var(--white);
+    }
+  }
+  @include hover() {
+    svg {
+      opacity: 0.5;
+    }
+  }
+}
+
+// --------------------------
+
+// オーディオ設定メニュー
+
+// --------------------------
+$BASE_COLOR: #ffdd8d;
+$UI_COLOR: #fff;
+$UI_SIZE_PC: 12px;
+.lConfig {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: auto;
+  z-index: 200;
+  width: 90svh;
+  height: 90svh;
+  backdrop-filter: blur($UI_SIZE_PC);
+  -webkit-backdrop-filter: blur($UI_SIZE_PC);
+
+  border-radius: 50%;
+  border: solid 2px rgba($BASE_COLOR, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba($BASE_COLOR, 0.1);
+  box-shadow:
+    0 0 liquid(24) rgba($BASE_COLOR, 0.3),
+    0 0 liquid(24) rgba($BASE_COLOR, 0.3);
+
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+  transition: 0.4s ease opacity;
+
+  @include sp_w() {
+    width: 80svh;
+    height: 80svh;
+  }
+
+  body[data-audio-menu="1"] & {
+    opacity: 1;
+    pointer-events: initial;
+    user-select: initial;
+  }
+}
+.lConfig__inner {
+  max-width: 300px;
+  width: 90%;
+  height: max-content;
+}
+.lConfig__close {
+  cursor: pointer;
+  position: absolute;
+  bottom: 24px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  z-index: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  svg {
+    pointer-events: none;
+    user-select: none;
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+    transition: $hoverTime $hoverEase opacity;
+  }
+  @include hover() {
+    svg {
+      opacity: 0.5;
+    }
+  }
+}
+.cAudioParamsList {
+}
+.cAudioParams {
+  margin-bottom: $UI_SIZE_PC;
+}
+.cAudioInputLabel {
+  width: 100%;
+  font-size: $UI_SIZE_PC;
+  font-weight: bold;
+}
+.cAudioInputSlide {
+  width: 100%;
+  margin-top: $UI_SIZE_PC * 0.5;
+  background: rgba($UI_COLOR, 0);
+  border: solid 2px $UI_COLOR;
+  height: $UI_SIZE_PC;
+  border-radius: $UI_SIZE_PC;
+
+  // つまみ
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none; // デフォルトのつまみのスタイルを解除
+    background: $UI_COLOR;
+    width: $UI_SIZE_PC;
+    height: $UI_SIZE_PC;
+    border-radius: 50%;
+
+    transform: scale(0.9);
+  }
+  &::-moz-range-thumb {
+    border: none; // デフォルトの線を消す
+    background: $UI_COLOR;
+    width: $UI_SIZE_PC;
+    height: $UI_SIZE_PC;
+    border-radius: 50%;
+    transform: scale(0.9);
+  }
+  &::-moz-focus-outer {
+    background: $UI_COLOR;
+    width: $UI_SIZE_PC;
+    height: $UI_SIZE_PC;
+    border-radius: 50%;
+    transform: scale(0.9);
+  }
+  &:active::-webkit-slider-thumb {
+    background: $UI_COLOR;
+    width: $UI_SIZE_PC;
+    height: $UI_SIZE_PC;
+    border-radius: 50%;
+  }
+}
+.cAudioInputFile {
+  cursor: pointer;
+  margin-top: 6px;
+  display: block;
+  width: calc(100% - $UI_SIZE_PC * 2);
+  padding: $UI_SIZE_PC;
+  border: solid 2px $UI_COLOR;
+  border-radius: $UI_SIZE_PC;
+
+  input[type="file"] {
+    display: none;
+  }
+}
+.cAudioInputFile__result {
+  text-align: center;
+  font-size: $UI_SIZE_PC - 2px;
+  line-height: 100%;
+  color: $UI_COLOR;
+}
